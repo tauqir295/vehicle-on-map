@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Vehicles List</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="api_failed">API Failed</string>
+    <string name="something_went_wrong">Something went wrong.</string>
+    <string name="ok">OK</string>
+    <string name="lat1">53.694865</string>
+    <string name="long1">9.757589</string>
+    <string name="lat2">53.394655</string>
+    <string name="long2">10.099891</string>
+    <string name="no_data_found">No data found</string>
+
+</resources>
