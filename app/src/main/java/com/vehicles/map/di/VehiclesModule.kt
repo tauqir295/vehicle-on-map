@@ -23,18 +23,14 @@ object VehiclesModule {
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        return if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            OkHttpClient.Builder()
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        return OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
                 .build()
-        } else OkHttpClient
-            .Builder()
-            .build()
     }
 
     @Provides

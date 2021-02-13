@@ -12,15 +12,86 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimens_16dp">
+        android:layout_margin="@dimen/dimens_16dp"
+        android:background="@drawable/round_corner"
+        android:elevation="1dp"
+        android:paddingHorizontal="@dimen/dimens_16dp"
+        android:paddingBottom="@dimen/dimens_16dp">
 
-        <TextView
+        <ImageView
+            android:id="@+id/ivCar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{vehicle.fleetType}"
+            android:contentDescription="@null"
+            android:src="@{vehicle.fleetType.equalsIgnoreCase(`Taxi`)? @drawable/taxi_car: @drawable/pooling_car}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{vehicle.fleetType}"
+            android:textColor="@{vehicle.fleetType.equalsIgnoreCase(`Taxi`)? @color/yellow: @color/black}"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivCar" />
+
+        <TextView
+            android:id="@+id/tvFleetType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`Id: ` + vehicle.id}"
+            android:textColor="@{vehicle.fleetType.equalsIgnoreCase(`Taxi`)? @color/yellow: @color/black}"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivCar" />
+
+        <ImageView
+            android:id="@+id/ivLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimens_16dp"
+            android:contentDescription="@null"
+            android:src="@drawable/location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvId" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_8dp"
+            android:text="@{String.format(` %.6f`, vehicle.coordinate.latitude) + `, ` + String.format(` %.6f`, vehicle.coordinate.longitude)}"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/ivLocation"
+            app:layout_constraintStart_toEndOf="@id/ivLocation"
+            app:layout_constraintTop_toTopOf="@id/ivLocation" />
+
+        <ImageView
+            android:id="@+id/ivDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_16dp"
+            android:contentDescription="@null"
+            android:src="@drawable/direction"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvHeading"
+            app:layout_constraintTop_toTopOf="@+id/ivLocation" />
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_8dp"
+            android:text="@{String.format(` %.6f`, vehicle.heading)}"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/ivDirection"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivDirection" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

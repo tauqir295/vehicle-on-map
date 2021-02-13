@@ -1,6 +1,5 @@
 # Sample app for map
 
-
 #Tools and devices
 1. Android studio
 2. Emulator Nexus 5X API 30
@@ -13,6 +12,8 @@
 4. Google hilt
 5. Data binding
 6. Live data
+
+# We can ride on one boat at a time. The proposed solution can be done in numerous ways. 
 
 # Why to use hilt and not Dagger 2?
 Hilt is built on top of the Dagger dependency injection library, 
