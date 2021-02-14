@@ -16,6 +16,7 @@ import com.vehicles.map.databinding.FragmentVehicleListBinding
 import com.vehicles.map.map.VehicleMapFragment
 import com.vehicles.map.utils.Logger
 import com.vehicles.map.utils.Status
+import com.vehicles.map.utils.replaceWithNextFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -124,14 +125,10 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
 
     override fun onItemClick(item: View, vehicle: Vehicle) {
 
-        requireActivity().run {
-            // navigate to landing fragment
-            supportFragmentManager.beginTransaction().replace(
-                    this@VehicleListFragment.id,
-                    VehicleMapFragment.newInstance(vehicle)
-            ).commitNow()
-        }
-
+        // using extension method for navigation to DeliveryDetailsFragment
+        replaceWithNextFragment(
+            this.id, parentFragmentManager, VehicleMapFragment.newInstance(), null, true
+        )
     }
 
     override fun onDestroy() {
