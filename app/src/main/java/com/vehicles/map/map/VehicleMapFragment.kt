@@ -16,9 +16,11 @@ import com.vehicles.map.data.Vehicle
 class VehicleMapFragment : Fragment() {
 
     var latLng = LatLng(-34.0, 151.0)
+    lateinit var vehicle: Vehicle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val vehicle = requireNotNull(arguments?.getParcelable("vehicle")) as Vehicle
+        vehicle = requireNotNull(arguments?.getParcelable("vehicle")) as Vehicle
 
         latLng = LatLng(vehicle.coordinate.latitude, vehicle.coordinate.longitude)
 
