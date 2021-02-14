@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vehicles.map.R
 import com.vehicles.map.data.VehicleList
 import com.vehicles.map.network.datasource.AppDataSource
 import com.vehicles.map.utils.Resource
