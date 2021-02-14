@@ -49,7 +49,7 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
     }
 
     /**
-     * Observe update on view model live data
+     * Observe update on shared view model live data
      */
     private fun setupObserver() {
 
@@ -113,7 +113,7 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
                 marker.setInfoWindowAnchor(infoAnchorX, infoAnchorY)
 
                 marker.title = it.fleetType
-                marker.snippet = "Id: " + it.id
+                marker.snippet = "Id: ${it.id}"
 
                 markersMap[it.id] = marker
                 builder.include(marker.position)
@@ -134,6 +134,10 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
         }
     }
 
+    /**
+     * get marker icon based on fleetType
+     * @param - [Vehicle] - fleetType is used as filter
+     */
     private fun getIcon(vehicle: Vehicle): BitmapDescriptor? {
         return if (vehicle.fleetType == POOLING) {
             BitmapDescriptorFactory.fromResource(R.drawable.pooling)
@@ -142,6 +146,10 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
         }
     }
 
+    /**
+     * animate map to selected marker
+     * @param - [Marker] - selected marker to view on map
+     */
     private fun animateMarkerToCenter(selectedMarker: Marker) {
         val cameraPosition = CameraPosition.Builder()
             .target(selectedMarker.position)
