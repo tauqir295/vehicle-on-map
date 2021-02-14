@@ -45,11 +45,7 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this@VehicleMapFragment)
 
-        val vehicle: Vehicle? = arguments?.getParcelable(VEHICLE)
-
-        vehicle?.let {
-            vehicleList.add(it)
-        } ?: setupObserver()
+        setupObserver()
     }
 
     /**
@@ -85,7 +81,6 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
-
         marker?.let {
             animateMarkerToCenter(it)
         }
@@ -94,7 +89,9 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
 
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map
+        googleMap?.setOnMarkerClickListener(this);
         val builder = LatLngBounds.Builder()
+        val markersMap = mutableMapOf<Int, Marker>()
         googleMap?.run {
             vehicleList.forEach {
                 val markerOptions = MarkerOptions()
@@ -117,10 +114,18 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
 
                 marker.title = it.fleetType
                 marker.snippet = "Id: " + it.id
+
+                markersMap[it.id] = marker
                 builder.include(marker.position)
             }
 
-            moveCamera(
+            val vehicle: Vehicle? = arguments?.getParcelable(VEHICLE)
+
+            vehicle?.let {
+                if (markersMap.containsKey(it.id)) {
+                    markersMap[it.id]?.let { marker -> animateMarkerToCenter(marker) }
+                }
+            }?: moveCamera(
                 CameraUpdateFactory.newLatLngBounds(
                     builder.build(),
                     resources.getDimensionPixelSize(R.dimen.dimens_24dp)

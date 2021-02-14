@@ -32,6 +32,7 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentVehicleListBinding? = null
     private val adapter = VehicleListAdapter()
+    private var vehicleList = ArrayList<Vehicle>()
 
     companion object {
         fun newInstance() = VehicleListFragment()
@@ -64,15 +65,17 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //initiating the API calls
-        vehicleListViewModel.fetchVehicleList(
-            getString(R.string.lat1),
-            getString(R.string.long1),
-            getString(R.string.lat2),
-            getString(R.string.long2)
-        )
+        if (vehicleList.size == 0) {
+            //initiating the API calls
+            vehicleListViewModel.fetchVehicleList(
+                getString(R.string.lat1),
+                getString(R.string.long1),
+                getString(R.string.lat2),
+                getString(R.string.long2)
+            )
+            setupObserver()
+        }
 
-        setupObserver()
     }
 
     /**
@@ -88,7 +91,8 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
                     it.data?.let { vehicle ->
                         Logger.d("LandingFragment SUCCESS", vehicle.poiList.toList().toString())
                         if (vehicle.poiList.isNotEmpty()) {
-                            adapter.updateCatList(vehicle.poiList as ArrayList<Vehicle>)
+                            vehicleList = vehicle.poiList as ArrayList<Vehicle>
+                            adapter.updateCatList(vehicleList)
                         } else {
                             Toast.makeText(requireContext(), getString(R.string.no_data_found), Toast.LENGTH_SHORT).show()
                         }
