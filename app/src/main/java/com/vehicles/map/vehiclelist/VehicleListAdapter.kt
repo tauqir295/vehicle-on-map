@@ -37,6 +37,7 @@ class VehicleListAdapter : RecyclerView.Adapter<VehicleListAdapter.VehicleViewHo
      * @param: [list] - used to populate the adapter items
      */
     fun updateCatList(list: ArrayList<Vehicle>) {
+        vehicleList.clear()
         val vehicleListSize = vehicleList.size
         vehicleList.addAll(list)
         notifyItemRangeChanged(vehicleListSize, vehicleList.size)

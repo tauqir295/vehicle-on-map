@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.vehicles.map.R
 import com.vehicles.map.data.Vehicle
@@ -16,17 +15,22 @@ import com.vehicles.map.databinding.FragmentVehicleListBinding
 import com.vehicles.map.map.VehicleMapFragment
 import com.vehicles.map.utils.Logger
 import com.vehicles.map.utils.Status
+import com.vehicles.map.utils.VehicleConstants.VEHICLE
 import com.vehicles.map.utils.replaceWithNextFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Landing screen for list of vehicles
+ * [VehicleListFragment] Landing screen to show list of vehicles
  */
 @AndroidEntryPoint
 class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickListener {
 
-    private val viewModel: VehicleListViewModel by viewModels()
-    private lateinit var binding: FragmentVehicleListBinding
+    private val vehicleListViewModel: VehicleListViewModel by activityViewModels()
+
+    // Binding object instance corresponding to the fragment_vehicle_list.xml layout
+    // This property is non-null between the onCreateView() and onDestroyView() lifecycle callbacks,
+    // when the view hierarchy is attached to the fragment.
+    private var binding: FragmentVehicleListBinding? = null
     private val adapter = VehicleListAdapter()
 
     companion object {
@@ -38,9 +42,11 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
         savedInstanceState: Bundle?
     ): View {
 
+        val fragmentBinding = FragmentVehicleListBinding.inflate(inflater, container, false)
+        binding = fragmentBinding
+
         // data binding is used
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_vehicle_list, container, false)
-        binding.apply {
+        binding?.apply {
             val layoutManager = GridLayoutManager(requireContext(), 1)
 
             vehicleListRv.layoutManager = layoutManager
@@ -50,16 +56,16 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
 
             // Specify the current fragment as the lifecycle owner of the binding.
             // This is necessary so that the binding can observe updates.
-            binding.lifecycleOwner = this@VehicleListFragment
+            lifecycleOwner = this@VehicleListFragment
         }
-        return binding.root
+        return fragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //initiating the API calls
-        viewModel.fetchVehicleList(
+        vehicleListViewModel.fetchVehicleList(
             getString(R.string.lat1),
             getString(R.string.long1),
             getString(R.string.lat2),
@@ -74,10 +80,10 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
      */
     private fun setupObserver() {
 
-        viewModel.vehicleList.observe(viewLifecycleOwner, {
+        vehicleListViewModel.vehicleList.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.SUCCESS -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding?.progressBar?.visibility = View.GONE
 
                     it.data?.let { vehicle ->
                         Logger.d("LandingFragment SUCCESS", vehicle.poiList.toList().toString())
@@ -91,13 +97,13 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
                 }
 
                 Status.LOADING -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding?.progressBar?.visibility = View.VISIBLE
 
                     Logger.d("LandingFragment LOADING", "LOADING")
                 }
 
                 Status.ERROR -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding?.progressBar?.visibility = View.GONE
 
                     //Handle Error
                     Logger.d("LandingFragment ERROR", it.message.toString())
@@ -127,13 +133,27 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
 
         // using extension method for navigation to DeliveryDetailsFragment
         replaceWithNextFragment(
-            this.id, parentFragmentManager, VehicleMapFragment.newInstance(), null, true
+            this.id,
+            parentFragmentManager,
+            VehicleMapFragment.newInstance(),
+            Bundle().apply {
+                      putParcelable(VEHICLE, vehicle)
+            },
+            true
         )
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.clearViewModelData()
+        vehicleListViewModel.clearViewModelData()
     }
 
+    /**
+     * This fragment lifecycle method is called when the view hierarchy associated with the fragment
+     * is being removed. As a result, clear out the binding object.
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
 }

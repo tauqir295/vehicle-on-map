@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -15,24 +16,20 @@ import com.vehicles.map.R
 import com.vehicles.map.data.Vehicle
 import com.vehicles.map.utils.Logger
 import com.vehicles.map.utils.Status
+import com.vehicles.map.utils.VehicleConstants.FOCUS_TILT
+import com.vehicles.map.utils.VehicleConstants.FOCUS_ZOOM_LEVEL
+import com.vehicles.map.utils.VehicleConstants.POOLING
+import com.vehicles.map.utils.VehicleConstants.VEHICLE
 import com.vehicles.map.vehiclelist.VehicleListViewModel
 import kotlin.math.cos
 import kotlin.math.sin
 
-class VehicleMapFragment : Fragment(), OnMarkerClickListener  {
+class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback {
 
     // Use the 'by activityViewModels()' Kotlin property delegate from the fragment-ktx artifact
     private val sharedViewModel: VehicleListViewModel by activityViewModels()
-    private var mMarkerIconTaxi: BitmapDescriptor? = null
-    private  var mMarkerIconPooling:BitmapDescriptor? = null
-
-    var latLng = LatLng(-34.0, 151.0)
-
-//    private val callback = OnMapReadyCallback { googleMap ->
-//
-//        googleMap.addMarker(MarkerOptions().position(latLng).title("Marker in here"))
-//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f))
-//    }
+    private var googleMap: GoogleMap? = null
+    private var vehicleList = ArrayList<Vehicle>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +41,16 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupObserver()
-    }
 
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(this@VehicleMapFragment)
+
+        val vehicle: Vehicle? = arguments?.getParcelable(VEHICLE)
+
+        vehicle?.let {
+            vehicleList.add(it)
+        } ?: setupObserver()
+    }
 
     /**
      * Observe update on view model live data
@@ -60,10 +64,9 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener  {
                     it.data?.let { vehicle ->
                         Logger.d("VehicleMapFragment SUCCESS", vehicle.poiList.toList().toString())
                         if (vehicle.poiList.isNotEmpty()) {
-                            updateMap(vehicle.poiList)
+                            vehicleList.addAll(vehicle.poiList as ArrayList<Vehicle>)
                         }
                     }
-
                 }
 
                 Status.LOADING -> {
@@ -81,13 +84,19 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener  {
         })
     }
 
-    private fun updateMap(vehicleList: List<Vehicle>) {
+    override fun onMarkerClick(marker: Marker?): Boolean {
 
-        val callback = OnMapReadyCallback { googleMap ->
-            val builder = LatLngBounds.Builder()
+        marker?.let {
+            animateMarkerToCenter(it)
+        }
+        return true
+    }
 
+    override fun onMapReady(map: GoogleMap?) {
+        googleMap = map
+        val builder = LatLngBounds.Builder()
+        googleMap?.run {
             vehicleList.forEach {
-                val marker: Marker
                 val markerOptions = MarkerOptions()
                     .position(
                         LatLng(
@@ -95,11 +104,11 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener  {
                             it.coordinate.longitude
                         )
                     )
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.pooling))
+                    .icon(getIcon(vehicle = it))
                     .rotation(it.heading.toFloat())
                     .anchor(0.5f, 0.5f)
 
-                marker = googleMap.addMarker(markerOptions)
+                val marker = addMarker(markerOptions)
                 val infoAnchorX =
                     (sin(-it.heading * Math.PI / 180) * 0.5 + 0.5).toFloat()
                 val infoAnchorY =
@@ -109,35 +118,37 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener  {
                 marker.title = it.fleetType
                 marker.snippet = "Id: " + it.id
                 builder.include(marker.position)
-
             }
 
-            googleMap.moveCamera(
+            moveCamera(
                 CameraUpdateFactory.newLatLngBounds(
                     builder.build(),
                     resources.getDimensionPixelSize(R.dimen.dimens_24dp)
                 )
             )
-
         }
-
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-
     }
 
+    private fun getIcon(vehicle: Vehicle): BitmapDescriptor? {
+        return if (vehicle.fleetType == POOLING) {
+            BitmapDescriptorFactory.fromResource(R.drawable.pooling)
+        } else {
+            BitmapDescriptorFactory.fromResource(R.drawable.taxi)
+        }
+    }
 
+    private fun animateMarkerToCenter(selectedMarker: Marker) {
+        val cameraPosition = CameraPosition.Builder()
+            .target(selectedMarker.position)
+            .zoom(FOCUS_ZOOM_LEVEL)
+            .bearing(selectedMarker.rotation)
+            .tilt(FOCUS_TILT.toFloat())
+            .build()
+        googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        selectedMarker.showInfoWindow()
+    }
 
-//
-//    override fun onMapReady(googleMap: GoogleMap) {
-//
-//    }
-        companion object {
+    companion object {
         fun newInstance() = VehicleMapFragment()
-    }
-
-    override fun onMarkerClick(marker: Marker?): Boolean {
-
-        return false
     }
 }
