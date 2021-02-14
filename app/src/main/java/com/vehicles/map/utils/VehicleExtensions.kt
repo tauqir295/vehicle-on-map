@@ -29,7 +29,7 @@ fun replaceWithNextFragment(
             if (addToBackStack) {
                 addToBackStack(fragment::class.simpleName)
             }
-            commitNow()
+            commit()
         }
     }
 
