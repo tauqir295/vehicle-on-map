@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             supportFragmentManager.beginTransaction().replace(
                 R.id.container,
                 VehicleListFragment.newInstance()
-            ).commitAllowingStateLoss()
+            ).commitNow()
         }
 
     }
