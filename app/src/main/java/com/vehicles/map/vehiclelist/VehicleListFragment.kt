@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.vehicles.map.R
 import com.vehicles.map.data.Vehicle
 import com.vehicles.map.databinding.FragmentVehicleListBinding
@@ -48,9 +47,7 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
 
         // data binding is used
         binding?.apply {
-            val layoutManager = GridLayoutManager(requireContext(), 1)
 
-            vehicleListRv.layoutManager = layoutManager
             vehicleListRv.adapter = adapter
 
             adapter.setOnItemClickListener(this@VehicleListFragment)
@@ -67,12 +64,6 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
 
         if (vehicleList.size == 0) {
             //initiating the API calls
-            vehicleListViewModel.fetchVehicleList(
-                getString(R.string.lat1),
-                getString(R.string.long1),
-                getString(R.string.lat2),
-                getString(R.string.long2)
-            )
             setupObserver()
         }
 
@@ -84,7 +75,7 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
     private fun setupObserver() {
 
         vehicleListViewModel.vehicleList.observe(viewLifecycleOwner, {
-            when (it.status) {
+            when (it?.status) {
                 Status.SUCCESS -> {
                     binding?.progressBar?.visibility = View.GONE
 
@@ -145,11 +136,6 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
             },
             true
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        vehicleListViewModel.clearViewModelData()
     }
 
     /**

@@ -54,7 +54,7 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
     private fun setupObserver() {
 
         sharedViewModel.vehicleList.observe(viewLifecycleOwner, {
-            when (it.status) {
+            when (it?.status) {
                 Status.SUCCESS -> {
 
                     it.data?.let { vehicle ->

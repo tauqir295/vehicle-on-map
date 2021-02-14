@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vehicles.map.R
 import com.vehicles.map.data.VehicleList
 import com.vehicles.map.network.datasource.AppDataSource
 import com.vehicles.map.utils.Resource
@@ -26,6 +27,11 @@ class VehicleListViewModel @Inject constructor(
     val vehicleList: LiveData<Resource<VehicleList>>
         get() = _vehicles
 
+    init {
+        //initiating the API calls
+        fetchVehicleList()
+    }
+
     /**
      * Fetch the data from API
      * @param - [latitude1] - variable used for lat1
@@ -34,10 +40,10 @@ class VehicleListViewModel @Inject constructor(
      * @param - [longitude2] - variable used for long2
      */
     fun fetchVehicleList(
-        latitude1: String,
-        longitude1: String,
-        latitude2: String,
-        longitude2: String
+        latitude1: String = "53.694865",
+        longitude1: String = "9.757589",
+        latitude2: String = "53.394655",
+        longitude2: String = "10.099891"
     ) {
         viewModelScope.launch {
             _vehicles.postValue(Resource.loading(null))
