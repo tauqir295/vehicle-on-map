@@ -14,6 +14,7 @@
 6. Live data
 7. Navigation
 8. Shared view model
+9. UI and unit test cases
 
 # Architecture source is inspired from android developer community
 ![App architecture](final-architecture.png "final-architecture")
