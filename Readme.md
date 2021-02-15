@@ -24,7 +24,7 @@ https://developer.android.com/jetpack/guide
 Hilt is built on top of the Dagger dependency injection library, 
 providing a standard way to incorporate Dagger into an Android application.
 More details from android developer site - 
-![More details from android developer site](https://developer.android.com/training/dependency-injection/hilt-android#hilt-and-dagger)
+https://developer.android.com/training/dependency-injection/hilt-android#hilt-and-dagger
 
 #Images
 WebP files are created using online photo-editor and are kept in drawable folder only.   
