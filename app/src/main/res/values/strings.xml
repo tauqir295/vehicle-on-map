@@ -9,5 +9,7 @@
     <string name="lat2">53.394655</string>
     <string name="long2">10.099891</string>
     <string name="no_data_found">No data found</string>
+    <string name="vehicle_list">Vehicle List</string>
+    <string name="vehicle_map">Vehicle Map</string>
 
 </resources>

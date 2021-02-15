@@ -1,5 +1,6 @@
 package com.vehicles.map.vehiclelist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.vehicles.map.R
 import com.vehicles.map.data.Vehicle
 import com.vehicles.map.databinding.FragmentVehicleListBinding
@@ -136,6 +138,13 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
             },
             true
         )
+
+        // Navigate to the next destination to select the flavor of the cupcakes
+//        findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
+
+        findNavController().setGraph(R.id.action_vehicleListFragment_to_vehicleMapFragment, Bundle().apply {
+            putParcelable(VEHICLE, vehicle)
+        })
     }
 
     /**
