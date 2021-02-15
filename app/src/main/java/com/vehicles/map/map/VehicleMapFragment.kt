@@ -44,7 +44,7 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
         super.onViewCreated(view, savedInstanceState)
 
         //enabling the home back button
-        //(requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
@@ -94,7 +94,7 @@ class VehicleMapFragment : Fragment(), OnMarkerClickListener, OnMapReadyCallback
 
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map
-        googleMap?.setOnMarkerClickListener(this);
+        googleMap?.setOnMarkerClickListener(this)
         val builder = LatLngBounds.Builder()
         val markersMap = mutableMapOf<Int, Marker>()
         googleMap?.run {

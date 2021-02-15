@@ -1,10 +1,8 @@
 package com.vehicles.map.network.datasource
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.vehicles.map.data.VehicleList
 import com.vehicles.map.network.ApiInterface
-import com.vehicles.map.utils.Logger
 import retrofit2.Response
 
 /**

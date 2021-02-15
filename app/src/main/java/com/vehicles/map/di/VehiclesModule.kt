@@ -1,7 +1,6 @@
 package com.vehicles.map.di
 
 import android.content.Context
-import com.vehicles.map.BuildConfig
 import com.vehicles.map.network.ApiInterface
 import com.vehicles.map.network.datasource.AppDataSource
 import com.vehicles.map.network.datasource.RemoteDataSource
