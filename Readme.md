@@ -1,10 +1,5 @@
 # Sample app for map
 
-# Architecture source is inspired from android developer community
-https://developer.android.com/jetpack/guide
-![App architecture](final-architecture.png "final-architecture")
-
-
 #Tools and devices
 1. Android studio
 2. Emulator Nexus 5X API 30
@@ -19,6 +14,11 @@ https://developer.android.com/jetpack/guide
 6. Live data
 7. Navigation
 8. Shared view model
+
+# Architecture source is inspired from android developer community
+![App architecture](final-architecture.png "final-architecture")
+https://developer.android.com/jetpack/guide
+
 
 # Why to use hilt and not Dagger ot Koin?
 Hilt is built on top of the Dagger dependency injection library, 
