@@ -16,15 +16,16 @@
 8. Shared view model
 9. UI and unit test cases. UI test cases will be green if internet is available.
 10. Screen rotation data persists
-11. network-security-config taken from https://developer.android.com/training/articles/security-config
+11. network-security-config inspired from https://developer.android.com/training/articles/security-config
 12. Generic error handling
+13. Coordinates has been truncated to 6th places after dot.
 
 #Enhancement
 1. Can add configuration structure. Also data caching can be added.
 2. Can pass base url from host app via configuration. 
-3. Use security protocols 
+3. Use security protocols for network calls.
 4. Minor bug fixes and ui changes can be scope for future changes.
-5. Release and proguard
+5. Release and proguard configuration.
 
 # Note
 Architecture source is inspired from android developer community
@@ -41,4 +42,7 @@ https://developer.android.com/training/dependency-injection/hilt-android#hilt-an
 Images
 WebP files are created using online photo-editor and are kept in drawable folder only.   
 
-# We can ride on one boat at a time. The proposed solution can be done in numerous ways. 
+We can ride on one boat at a time. 
+
+This is not a full fledged app. Check enhancements point 4.
+The proposed solution can be done in numerous ways. 

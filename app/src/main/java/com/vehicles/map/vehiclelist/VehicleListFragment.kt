@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.vehicles.map.R
@@ -62,6 +63,8 @@ class VehicleListFragment : Fragment(), VehicleListAdapter.OnRecyclerItemClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //enabling the home back button
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         if (vehicleList.size == 0) {
             //initiating the API calls
             setupObserver()
