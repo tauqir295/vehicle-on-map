@@ -41,8 +41,3 @@ https://developer.android.com/training/dependency-injection/hilt-android#hilt-an
 
 Images
 WebP files are created using online photo-editor and are kept in drawable folder only.   
-
-We can ride on one boat at a time. 
-
-This is not a full fledged app. Check enhancements point 4.
-The proposed solution can be done in numerous ways. 
